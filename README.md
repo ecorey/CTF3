@@ -1,66 +1,11 @@
-## Foundry
+Using the Isolution4 interface write a function that unpacks our data that was packed using abi.encodePacked(a, b, c).
+Where a is type uint16, b is type bool and c is type bytes6.
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+    interface Isolution3 {
+        function solution(bytes memory packed) external returns (uint16 a, bool b, bytes6 c);
+        }
 
-Foundry consists of:
+Deploy:
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
-
-## Documentation
-
-https://book.getfoundry.sh/
-
-## Usage
-
-### Build
-
-```shell
-$ forge build
-```
-
-### Test
-
-```shell
-$ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+// To Deploy and Run script just add private key with no double quotes
+forge create --rpc-url https://sepolia.gateway.pokt.network/v1/lb/ae75c2b1 --private-key xxxx src/CTF3.sol:CTF3
