@@ -6,7 +6,7 @@
 
 //SPDX-License-Identifier:MIT
 
-pragma solidity 0.8.17;
+pragma solidity 0.8.21;
 
 interface Isolution3 {
     function solution(bytes memory packed) external returns (uint16 a, bool b, bytes6 c);
@@ -31,7 +31,7 @@ contract CTF3 is Isolution3 {
     // there is no direct abi.decodePacked but rather decode is used according to the size of the variables
    
     // uint16 + bool + bytes6 = 2 + 1 + 6 = 9 bytes   for eg.
-    // 0x000101010101010101 = encodeData(1, 1, 0x010101010101)
+    // solution(0x000101010101010101) = encodeData(1, 1, 0x010101010101)
     // 0x000101010101010101 = 9 bytes, as each byte is represented by 2 places
     function solution (bytes memory packed) external override pure returns (uint16 a, bool b, bytes6 c){
       
@@ -55,6 +55,7 @@ contract CTF3 is Isolution3 {
         // the temp is then used to reconstruct the bytes6 value c
         bytes memory temp = new bytes(6);
         for (uint i = 0; i < 6; i++) {
+            // starting at 4th position
             temp[i] = packed[3 + i];
         }
         c = bytes6(temp);
