@@ -20,9 +20,10 @@ contract CTF3 is Isolution3 {
     // for a reference to the size of variables see the bottom
     // bytes6 seriesOfOnes = 0x010101010101;
     // encodeData(1, 1, 0x010101010101) == bytes: 0x000101010101010101
-    function encodeData(uint16 a, bool b, bytes6 c) public pure returns (bytes memory) {
-        return abi.encodePacked(a, b, c);
-    }
+    
+    // function encodeData(uint16 a, bool b, bytes6 c) public pure returns (bytes memory) {
+    //     return abi.encodePacked(a, b, c);
+    // }
 
 
     // using the 'packed' verions of encode allows you to pack variables acording to their size
