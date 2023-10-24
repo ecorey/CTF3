@@ -12,6 +12,7 @@ interface Isolution3 {
 
 contract CTF3 is Isolution3 {
 
+
     function decode(bytes memory packed) public pure returns (uint16 a, bool b, bytes6 c) {
         // The first 2 bytes are for uint16, next 1 byte is for bool, and the last 6 bytes are for bytes6
         (a, b, c) = abi.decode(packed, (uint16, bool, bytes6));
