@@ -12,6 +12,11 @@ interface Isolution3 {
 
 contract CTF3 is Isolution3 {
 
+       function decode(bytes memory packed) public pure returns (uint16 a, bool b, bytes6 c) {
+            // The first 2 bytes are for uint16, next 1 byte is for bool, and the last 6 bytes are for bytes6
+            (a, b, c) = abi.decode(packed, (uint16, bool, bytes6));
+        }
+
     function solution (bytes memory packed) external override returns (uint16 a, bool b, bytes6 c){
       
         require(packed.length >= 8, "Invalid packed data length");
@@ -33,20 +38,25 @@ contract CTF3 is Isolution3 {
     }
 
 
-    //  function solution(bytes memory packed) external override returns (uint16 a, bool b, bytes6 c) {
-    //     require(packed.length >= 8, "Invalid packed data length");
-        
-    //     assembly {
-    //         // Unpacking uint16
-    //         a := and(mload(add(packed, 32)), 0xFFFF)
-            
-    //         // Unpacking bool
-    //         b := and(mload(add(packed, 33)), 0x1)
-            
-    //         // Unpacking bytes6
-    //         c := and(mload(add(packed, 34)), 0xFFFFFFFFFFFF00000000000000000000000000000000000000000000000000000)
-    //         c := shr(208, c)  // shift right to align the bytes6 data
-    //     }
-    // }
+  
 
 }
+
+
+
+/**
+ * SIZE OF VARIABLES IN SOLIDITY
+ * Static:
+ *  bool - 1 byte
+ *  uint8 - 1 byte
+ *  uint256 - 32 bytes
+ *  address - 20 bytes
+ *  bytes1 [1] - 1 byte
+ *  bytes32 [1] - 32 bytes
+ *  
+ * Dynamic // unfixed number of bytes: (dynamic arrays use tails in abi.encode where static uses length of array)
+ *  bytes 
+ *  string 
+ *  [] 
+ *  structs  
+ */
