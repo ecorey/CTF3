@@ -9,3 +9,6 @@ Deploy:
 
 // To Deploy and Run script just add private key with no double quotes
 forge create --rpc-url https://sepolia.gateway.pokt.network/v1/lb/ae75c2b1 --private-key xxxx src/CTF3.sol:CTF3
+
+deployed to:
+0x796DDdEB7A2FDA94D869B9b5263C409d93B089Cf
