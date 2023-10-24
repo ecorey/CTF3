@@ -12,14 +12,48 @@ interface Isolution3 {
 
 contract CTF3 is Isolution3 {
 
+    // function to encode for examples
+    // remove in final with all other examples
+    // using the 'packed' verions of encode allows you to pack variables acording to their size
+    // for a reference to the size of variables see the bottom
+    function encodeData(uint16 a, bool b, bytes6 c) public pure returns (bytes memory) {
+        return abi.encodePacked(a, b, c);
+    }
 
+
+    // using encode will allocate the entire memory slot
     function decode(bytes memory packed) public pure returns (uint16 a, bool b, bytes6 c) {
         // The first 2 bytes are for uint16, next 1 byte is for bool, and the last 6 bytes are for bytes6
         (a, b, c) = abi.decode(packed, (uint16, bool, bytes6));
     }
 
 
-    function solution (bytes memory packed) external override returns (uint16 a, bool b, bytes6 c){
+    // using the 'packed' verions of encode allows you to pack variables acording to their size
+    // for a reference to the size of variables see the bottom
+    // There is no direct abi.decodePacked but rather decode is used according to the size of the variables
+   function decodeData(bytes memory packed) public pure returns (uint16 a, bool b, bytes6 c) {
+     // uint16 + bool + bytes6 = 2 + 1 + 6 = 9
+     require(packed.length == 9, "Invalid packed data");
+        
+        bytes memory aBytes = new bytes(2);
+        aBytes[0] = packed[0];
+        aBytes[1] = packed[1];
+        a = abi.decode(aBytes, (uint16));
+        
+        bytes memory bBytes = new bytes(1);
+        bBytes[0] = packed[2];
+        b = abi.decode(bBytes, (bool));
+        
+        bytes memory cBytes = new bytes(6);
+        for (uint256 i = 0; i < 6; i++) {
+            cBytes[i] = packed[3 + i];
+        }
+        c = abi.decode(cBytes, (bytes6));
+   }
+
+
+
+    function solution (bytes memory packed) external override pure returns (uint16 a, bool b, bytes6 c){
       
         require(packed.length >= 8, "Invalid packed data length");
         
@@ -44,6 +78,7 @@ contract CTF3 is Isolution3 {
 
 }
 
+// uint16 + bool + bytes6 = 2 + 1 + 6 = 9
 
 
 /**
@@ -51,10 +86,12 @@ contract CTF3 is Isolution3 {
  * Static:
  *  bool - 1 byte
  *  uint8 - 1 byte
+ *  uint16 - 2 bytes
  *  uint256 - 32 bytes
  *  address - 20 bytes
- *  bytes1 [1] - 1 byte
- *  bytes32 [1] - 32 bytes
+ *  bytes1 - 1 byte
+ *  bytes6 - 6 bytes
+ *  bytes32 - 32 bytes
  *  
  * Dynamic // unfixed number of bytes: (dynamic arrays use tails in abi.encode where static uses length of array)
  *  bytes 
