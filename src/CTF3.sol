@@ -34,7 +34,7 @@ contract CTF3 is Isolution3 {
     // 0x000101010101010101 = 9 bytes, as each byte is represented by 2 places
     function solution (bytes memory packed) external override pure returns (uint16 a, bool b, bytes6 c){
       
-        // rewuires the byte array to be the correct size
+        // requires the byte array to be the correct size
         require(packed.length >= 8, "Invalid packed data length");
         
         // unpacking uint16
@@ -49,12 +49,16 @@ contract CTF3 is Isolution3 {
         b = packed[2] != 0;
         
         // unpacking bytes6
+        // to unpack the bytes6 first a temporary bytes array temp of length 6 is created
+        // a for loop then iterates from 0 to 5, copying the 4th to 9th bytes of the packed array into temp array
+        // the temp is then used to reconstruct the bytes6 value c
         bytes memory temp = new bytes(6);
         for (uint i = 0; i < 6; i++) {
             temp[i] = packed[3 + i];
         }
         c = bytes6(temp);
         
+        // the unpacked uint16, bool, and bytes6 are returned
         return (a, b, c);
     }
 
