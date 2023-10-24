@@ -27,22 +27,28 @@ contract CTF3 is Isolution3 {
 
     // using the 'packed' verions of encode allows you to pack variables acording to their size
     // for a reference to the size of variables see the bottom
-    // There is no direct abi.decodePacked but rather decode is used according to the size of the variables
+    // there is no direct abi.decodePacked but rather decode is used according to the size of the variables
    
     // uint16 + bool + bytes6 = 2 + 1 + 6 = 9 bytes   for eg.
     // 0x000101010101010101 = encodeData(1, 1, 0x010101010101)
     // 0x000101010101010101 = 9 bytes, as each byte is represented by 2 places
     function solution (bytes memory packed) external override pure returns (uint16 a, bool b, bytes6 c){
       
+        // rewuires the byte array to be the correct size
         require(packed.length >= 8, "Invalid packed data length");
         
-        // Unpacking uint16
+        // unpacking uint16
+        // the first two bytes of the packed array, packed[0], packed[1] are used to recontruct the uint16
+        // packed[0] is multiplied by 256 (or shifted left by 8 bits) to account for its position as the higher order byte
+        // packed[1] is added to the value from the line above as the lower order byte
         a = uint16(uint8(packed[0])) * 256 + uint16(uint8(packed[1]));
         
-        // Unpacking bool
+        // unpacking bool
+        // the third byte of the packed array, packed[2], is used to reconstruct the bool
+        // if packed[2] == non-zero then is true, else is false
         b = packed[2] != 0;
         
-        // Unpacking bytes6
+        // unpacking bytes6
         bytes memory temp = new bytes(6);
         for (uint i = 0; i < 6; i++) {
             temp[i] = packed[3 + i];
