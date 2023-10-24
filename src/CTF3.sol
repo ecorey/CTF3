@@ -2,6 +2,8 @@
 // packed using abi.encodePacked(a, b, c).
 // Where a is type uint16, b is type bool and c is type bytes6.
 
+
+
 //SPDX-License-Identifier:MIT
 
 pragma solidity 0.8.17;
@@ -16,43 +18,20 @@ contract CTF3 is Isolution3 {
     // remove in final with all other examples
     // using the 'packed' verions of encode allows you to pack variables acording to their size
     // for a reference to the size of variables see the bottom
+    // bytes6 seriesOfOnes = 0x010101010101;
+    // encodeData(1, 1, 0x010101010101) == bytes: 0x000101010101010101
     function encodeData(uint16 a, bool b, bytes6 c) public pure returns (bytes memory) {
         return abi.encodePacked(a, b, c);
-    }
-
-
-    // using encode will allocate the entire memory slot
-    function decode(bytes memory packed) public pure returns (uint16 a, bool b, bytes6 c) {
-        // The first 2 bytes are for uint16, next 1 byte is for bool, and the last 6 bytes are for bytes6
-        (a, b, c) = abi.decode(packed, (uint16, bool, bytes6));
     }
 
 
     // using the 'packed' verions of encode allows you to pack variables acording to their size
     // for a reference to the size of variables see the bottom
     // There is no direct abi.decodePacked but rather decode is used according to the size of the variables
-   function decodeData(bytes memory packed) public pure returns (uint16 a, bool b, bytes6 c) {
-     // uint16 + bool + bytes6 = 2 + 1 + 6 = 9
-     require(packed.length == 9, "Invalid packed data");
-        
-        bytes memory aBytes = new bytes(2);
-        aBytes[0] = packed[0];
-        aBytes[1] = packed[1];
-        a = abi.decode(aBytes, (uint16));
-        
-        bytes memory bBytes = new bytes(1);
-        bBytes[0] = packed[2];
-        b = abi.decode(bBytes, (bool));
-        
-        bytes memory cBytes = new bytes(6);
-        for (uint256 i = 0; i < 6; i++) {
-            cBytes[i] = packed[3 + i];
-        }
-        c = abi.decode(cBytes, (bytes6));
-   }
-
-
-
+   
+    // uint16 + bool + bytes6 = 2 + 1 + 6 = 9 bytes   for eg.
+    // 0x000101010101010101 = encodeData(1, 1, 0x010101010101)
+    // 0x000101010101010101 = 9 bytes, as each byte is represented by 2 places
     function solution (bytes memory packed) external override pure returns (uint16 a, bool b, bytes6 c){
       
         require(packed.length >= 8, "Invalid packed data length");
@@ -74,9 +53,9 @@ contract CTF3 is Isolution3 {
     }
 
 
-  
-
 }
+
+
 
 // uint16 + bool + bytes6 = 2 + 1 + 6 = 9
 
